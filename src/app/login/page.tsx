@@ -12,15 +12,11 @@ export default function Login() {
   const router = useRouter();
   const { login } = useAuth();
 
-  // const { token } = useAuth(); // Obtém o token do contexto
-
   useEffect(() => {
-    // if (typeof window !== "undefined") {
     const token = localStorage.getItem("@token");
     console.log(token);
     if (token) {
       router.push("/dashboard");
-      // }
     }
   }, [router]);
 
@@ -42,12 +38,12 @@ export default function Login() {
       loginSchema.parse(formData);
       const res = await api.post("/login", formData);
       login(res.data.user, res.data.token);
-      router.push("/dashboard"); // Redireciona após login bem-sucedido
+      router.push("/dashboard");
     } catch (err: unknown) {
       if (err instanceof ZodError) {
-        setError(err.errors[0].message); // Captura a mensagem de erro do Zod
+        setError(err.errors[0].message);
       } else if (err instanceof Error) {
-        setError(err.message); // Captura a mensagem genérica
+        setError(err.message);
       } else {
         setError("Credenciais inválidas. Tente novamente.");
       }
@@ -63,13 +59,10 @@ export default function Login() {
         <h2 className="text-3xl font-bold text-center text-gray-700 mb-6">
           Login
         </h2>
-
-        {/* Feedback de erro */}
         {error && (
           <div className="text-red-600 text-sm text-center mb-4">{error}</div>
         )}
 
-        {/* Input de Email */}
         <Input
           id="email"
           name="email"
@@ -81,7 +74,6 @@ export default function Login() {
           error={error ? "Email ou senha inválidos" : ""}
         />
 
-        {/* Input de Senha */}
         <Input
           id="password"
           name="password"
@@ -91,8 +83,6 @@ export default function Login() {
           value={formData.password}
           onChange={handleChange}
         />
-
-        {/* Botão de Login */}
         <button
           type="submit"
           className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
